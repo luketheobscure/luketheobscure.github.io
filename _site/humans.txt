@@ -1,0 +1,14 @@
+/* TEAM */
+Creator: Luke Deniston
+Contact: luke@lukedeniston.com
+Twitter: lukedeniston
+Location: Fresno, CA
+                           
+/* THANKS */                           
+Creator of Balzac theme: Cole Townsend
+Twitter: @twnsndco
+
+/* SITE */                         
+Last update: 2014-05-08
+Standards: HTML, SCSS, Jekyll                        
+Software: git

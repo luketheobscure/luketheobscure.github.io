@@ -1,0 +1,48 @@
+title:            Luke Deniston
+tagline:          Blog of Luke Deniston
+description:      Blog of Luke Deniston
+#Comment out url when working locally to resolve base urls correctly
+#url: http://lukedeniston.com
+
+# Owner/author information
+owner:
+  name:           Luke Deniston
+  avatar:         avatar.png
+  bio:            "Programmer & Painter"
+  email:          luke@lukedeniston.com
+  twitter:        lukedeniston        
+  github:         luketheobscure      
+  location:       "Fresno, CA"
+  # Plug in your disqus shortname!
+
+tools:
+  standards:      "HTML, SCSS, Jekyll"
+  software:       "git"
+
+# Links to include in top navigation
+# For external links add external: true
+links:
+  - title: About
+    url: /about
+  - title: Resumé
+    url: http://re.vu/Luke.Deniston
+
+# http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+timezone:    America/Los_Angeles
+future:      true
+pygments:
+  lexer: objective-c
+
+kramdown:
+  auto_ids: true
+  footnote_nr: 1
+  entity_output: as_char
+  toc_levels: 1..6
+  use_coderay: false
+
+
+# https://github.com/mojombo/jekyll/wiki/Permalinks
+permalink:   /:categories/:title
+
+include: [".htaccess"]
+exclude: ["lib", "config.rb", "Capfile", "config", "log", "Rakefile", "Rakefile.rb", "tmp"]

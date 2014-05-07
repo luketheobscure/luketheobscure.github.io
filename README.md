@@ -1,4 +1,4 @@
-luketheobscure.github.io
-========================
+# lukedeniston.com source
 
-Source code for jekyll blog at luketheobscure.github.io.
+Using a modified version of the awesome [Balzac](https://github.com/ColeTownsend/Balzac-for-Jekyll) theme for Jekyll.
+
