@@ -5,13 +5,49 @@
 <generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="/feed.xml" />
 <link rel="alternate" type="text/html" href="" />
-<updated>2014-05-08T13:27:39-07:00</updated>
+<updated>2014-06-12T13:42:30-07:00</updated>
 <id>/</id>
 <author>
   <name>Luke Deniston</name>
   <uri>/</uri>
   <email>luke@lukedeniston.com</email>
 </author>
+
+
+<entry>
+  <title type="html"><![CDATA[A Goodbye Letter to Objective-C]]></title>
+  <link rel="alternate" type="text/html" href="/goodbye-objective-c" />
+  <id>/goodbye-objective-c</id>
+  <published>2014-06-12T06:58:55-07:00</published>
+  <updated>2014-06-12T06:58:55-07:00</updated>
+  <author>
+    <name>Luke Deniston</name>
+    <uri></uri>
+    <email>luke@lukedeniston.com</email>
+  </author>
+  <content type="html">&lt;p&gt;I had just been tasked to lead a mobile development team and I needed to pick up Objective-C (and iOS in general) very quickly. I wasn’t too worried since I had made similar transitions in the past without a problem. I assumed this would be even more painless since the more languages you know, the easier it is to learn a new one.&lt;/p&gt;
+
+&lt;h3 id=&#39;i_was_wrong&#39;&gt;I was wrong.&lt;/h3&gt;
+
+&lt;p&gt;Objective-C hurt my brain. My internal parser just couldn’t grasp the syntax. So I got mad. “What’s with the square brackets? Why are variables INSIDE the method name!? This is stupid. Why would anyone make a language like this?” But as with all my feelings I stuffed them into a bottle and never thought about them again, and over time something unexpected happened: &lt;em&gt;I fell in love&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;I grew to love the obscenely long method names with the variables inside of the method (they read like sentences!). I even loved the square brackets (what a perfect visual metaphor for sending a message- they’re the envelope!). I learned the intricacies of the Objective-C runtime and the Foundation frameworks. I was swizzling and introspecting in ways I never thought possible.&lt;/p&gt;
+
+&lt;p&gt;But by definition, Objective-C could never be free of C. String concatenation would always be the unsightly &lt;code&gt;[NSString stringWithFormat@“%@ %@, foo, bar]&lt;/code&gt;. All the good operators were already taken by C, so we were left with having to put an ampersand in front of everything. We would never be able to do a simple &lt;code&gt;==&lt;/code&gt; to compare. But who needs tuples, when you can pass in pointers, amiright?&lt;/p&gt;
+
+&lt;p&gt;And occasionally I would bump my shins against the language. Lack of a generics equivalent meant that to be truly safe, every array loop should implement type checking. No namespaces meant that official guidelines dictated putting a three letter prefix before every class. Not to mention enums like &lt;code&gt;kCFStreamErrorHTTPSProxyFailureUnexpectedResponseToCONNECTMethod&lt;/code&gt; (yes, that’s &lt;a href=&#39;https://developer.apple.com/library/mac/documentation/Networking/Reference/CFNetworkErrors/Reference/reference.html#//apple_ref/doc/c_ref/kCFURLErrorNotConnectedToInternet&#39;&gt;real&lt;/a&gt;. Objective-C had a beauty to it, but it was marred in many places by things like it’s &lt;a href=&#39;http://goshdarnblocksyntax.com/&#39;&gt;gosh darn block syntax&lt;/a&gt; (which is the work safe version of that url. The real version doesn’t use “gosh darn” and starts with “f”).&lt;/p&gt;
+
+&lt;p&gt;&lt;img alt=&#39;Introducing Swift&#39; src=&#39;/images/Swift.jpg&#39; /&gt;&lt;/p&gt;
+
+&lt;p&gt;When Swift was announced, I was shocked. So much progress had been made in Objective-C over the past year or two that there was no sign of Apple abandoning it. I even felt a little bit betrayed. Here I had become an expert in a language, just in time to see it die.&lt;/p&gt;
+
+&lt;p&gt;But there is a season for everything, and Objective-C’s time has passed. My work responsibilities necessitated my brushing up on Ruby, and I remembered my love for it’s conciseness and intuitiveness. It still manages to read like english, despite being terse. Moving from the Ruby world to the Swift world seems fluid… there’s so much overlap that it seems like different accents of the same language. You say &lt;code&gt;def&lt;/code&gt; I say &lt;code&gt;func&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;I think in time my love for Objective-C will fade. Dots and parenthesis will replace square brackets, and Objective-C will take it’s place in history as that oddball permutation of Smalltalk tacked on to C. Swift will take over, and any projects or libraries still in Objective-C will be left to the old guard.&lt;/p&gt;
+
+&lt;p&gt;But for a while there, Objective-C and I really had something.&lt;/p&gt;
+  &lt;p&gt;&lt;a href=&quot;/goodbye-objective-c&quot;&gt;A Goodbye Letter to Objective-C&lt;/a&gt; was originally published by Luke Deniston at &lt;a href=&quot;&quot;&gt;Luke Deniston&lt;/a&gt; on June 12, 2014.&lt;/p&gt;</content>
+</entry>
 
 
 <entry>
