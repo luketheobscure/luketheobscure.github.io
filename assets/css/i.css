@@ -300,12 +300,6 @@ blockquote, blockquote p {
   margin-bottom: 33px;
 }
 
-/*   Code Formatting    */
-pre {
-	margin-bottom: 33px;
-	overflow: auto;
-}
-
 code {
   color: #24536b;
   font-family: "Monaco", "Courier New", "Courier";

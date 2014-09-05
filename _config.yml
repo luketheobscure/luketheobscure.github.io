@@ -1,10 +1,7 @@
 title:            Luke Deniston
 tagline:          Blog of Luke Deniston
 description:      Blog of Luke Deniston
-#Comment out url when working locally to resolve base urls correctly
-#url: http://lukedeniston.com
 
-# Owner/author information
 owner:
   name:           Luke Deniston
   avatar:         avatar.png
@@ -13,7 +10,6 @@ owner:
   twitter:        lukedeniston        
   github:         luketheobscure      
   location:       "Fresno, CA"
-  # Plug in your disqus shortname!
 
 tools:
   standards:      "HTML, SCSS, Jekyll"
@@ -27,21 +23,13 @@ links:
   - title: Resumé
     url: http://re.vu/Luke.Deniston
 
-# http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
 timezone:    America/Los_Angeles
 future:      true
-pygments:
-  lexer: objective-c
 
-kramdown:
-  auto_ids: true
-  footnote_nr: 1
-  entity_output: as_char
-  toc_levels: 1..6
-  use_coderay: false
+markdown: redcarpet
+redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "disable_indented_code_blocks", "autolink", "strikethrough", "highlight", "superscript", "tables", "footnotes", "with_toc_data"]
 
-
-# https://github.com/mojombo/jekyll/wiki/Permalinks
 permalink:   /:categories/:title
 
 include: [".htaccess"]

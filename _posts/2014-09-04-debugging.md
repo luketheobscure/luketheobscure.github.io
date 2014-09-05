@@ -8,27 +8,28 @@ tags: [swift, objective-c, ios, coredata, debugging]
 description: Debugging is arguably the most important skill in a programmers toolkit, yet it's almost never talked about in technical interviews, and it barely gets a mention in most computer science programs.
 ---
 
-Here's a little story about a Swift/CoreData bug I cam across and how I got to the bottom of things.
+Here's a little story about an elusive Swift/CoreData bug I came across and how I got to the bottom of things.
 
 ##Green, Red, Refactor?
 
 I've been working on a small side project in Swift and I just got around to writing some unit tests. Up until this point it has mostly been proof-of-concept, so the code was prety rough and I was ready to start cleaning it up. One technique I used throughout my `NSManagedObject` classes looked something like this:
 
-	class func userWithUsername(username: String) -> User {
-		var user : User?
-		let request = NSFetchRequest()
-		request.entity = NSEntityDescription.entityForName("User", inManagedObjectContext: CoreDataStack.sharedInstance.managedObjectContext)
-		request.predicate = NSPredicate(format: "username = '\(username)'")
-		user = CoreDataStack.sharedInstance.managedObjectContext.executeFetchRequest(request, error: nil).last as? User
+{% highlight swift %}
+class func userWithUsername(username: String) -> User {
+	var user : User?
+	let request = NSFetchRequest()
+	request.entity = NSEntityDescription.entityForName("User", inManagedObjectContext: CoreDataStack.sharedInstance.managedObjectContext)
+	request.predicate = NSPredicate(format: "username = '\(username)'")
+	user = CoreDataStack.sharedInstance.managedObjectContext.executeFetchRequest(request, error: nil).last as? User
 
-		if user == nil {
-			user =  NSEntityDescription.insertNewObjectForEntityForName("User", inManagedObjectContext: CoreDataStack.sharedInstance.managedObjectContext) as? User
-			user?.username = username
-		}
-
-		return user!;
+	if user == nil {
+		user =  NSEntityDescription.insertNewObjectForEntityForName("User", inManagedObjectContext: CoreDataStack.sharedInstance.managedObjectContext) as? User
+		user?.username = username
 	}
 
+	return user!;
+}	
+{% endhighlight %}
 
 This function will give me the `User` with the given `username`, or if one doesn't exist it creates it. I know this code is working fine, but when I write a unit test it faults on the last line, reporting that `user` was still `nil`! But how could that be?
 
@@ -38,7 +39,9 @@ The first step I usually take in debugging is *isolation*: remove as many extern
 
 The function above is not particularly well written, as it depends on `CoreDataStack.sharedInstance` to work properly. It would be far better to implement [dependency injection](http://en.wikipedia.org/wiki/Dependency_injection) so I could pass in an `NSManagedObjectContext`. I'd read a bit about race conditions causing problems with SQLite backed stores in unit tests, so I implemented a new `NSInMemoryStoreType` persistent store for my tests and refactured the function under test a bit. My new function signature looked like this:
 
-	class func userWithUsername(username: String, context: NSManagedObjectContext = CoreDataStack.sharedInstance.managedObjectContext) -> User
+{% highlight swift %}
+class func userWithUsername(username: String, context: NSManagedObjectContext = CoreDataStack.sharedInstance.managedObjectContext) -> User
+{% endhighlight %}
 
 I can now pass in an `NSManagedObjectContext` if I want to, or I can rely on the default one provided by my `CoreDataStack.sharedInstance`. I patted myself on the back and fired off my tests... Only to have them fail in the exact same way.
 
@@ -59,19 +62,22 @@ The last technique I used was *breaking it down*: assume nothing, confirm every 
 
 I make some headway when I split my insert statement into two:
 
-	let entity = NSEntityDescription.entityForName("User", inManagedObjectContext: context)
-	user =  User(entity: entity, insertIntoManagedObjectContext: context)
+{% highlight swift %}
+let entity = NSEntityDescription.entityForName("User", inManagedObjectContext: context)
+user =  User(entity: entity, insertIntoManagedObjectContext: context)
+{% endhighlight %}
 
 My inserts are working now, but my fetch requests are failing... But *why*? Why did that fix the insert statement? Why did I only have the problem with tests and not in production? And why isn't my fetch request working?
 
 I break down the fetch request into it's parts so I can inspect it properly (LLDB still isn't working right for me as of XCode 6 beta 6). I finally get to this point:
-
-	user = context.executeFetchRequest(request, error: error).last as? User
-	
+{% highlight swift %}
+user = context.executeFetchRequest(request, error: error).last as? User
+{% endhighlight %}
 Became:
-
-	let results = context.executeFetchRequest(request, error: error)
-	user = results.last as? User
+{% highlight swift %}
+let results = context.executeFetchRequest(request, error: error)
+user = results.last as? User
+{% endhighlight %}
 	
 I'm able to confirm that `results` is getting data! I'm pulling records in my fetch request! But `user` still gets set to `nil`!? -cue head pounding on desk-
 
