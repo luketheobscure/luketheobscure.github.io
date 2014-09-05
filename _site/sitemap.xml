@@ -6,6 +6,10 @@
 
     
     <url>
+        <loc>/debugging</loc>
+    </url>
+    
+    <url>
         <loc>/goodbye-objective-c</loc>
     </url>
     

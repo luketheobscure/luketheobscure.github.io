@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<title>A Debugging Story &#8211; Luke Deniston</title>
+<meta name="description" content="Debugging is arguably the most important skill in a programmers toolkit, yet it's almost never talked about in technical interviews, and it barely gets a mention in most computer science programs.">
+<meta name="keywords" content="swift, objective-c, ios, coredata, debugging">
+
+
+<meta property="og:locale" content="en_US">
+<meta property="og:title" content="A Debugging Story &#8211; Luke Deniston">
+<meta property="og:description" content="Debugging is arguably the most important skill in a programmers toolkit, yet it's almost never talked about in techni...">
+<meta property="og:url" content="/debugging">
+<meta property="og:site_name" content="Luke Deniston">
+
+
+<link href="/feed.xml" type="application/atom+xml" rel="alternate" title="Luke Deniston Feed">
+
+<!-- http://t.co/dKP3o1e -->
+<meta name="HandheldFriendly" content="True">
+<meta name="MobileOptimized" content="320">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Type -->
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Crimson+Text:400,400italic,700,700italic" rel='stylesheet' type='text/css' />
+<link href="//fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="/assets/css/entypo.css" media="all">
+<link rel="stylesheet" href="/assets/css/syntax.css" media="all">
+
+<!-- In order to use Calendas Plus, you must first purchase it. Then, create a font-face package using FontSquirrel.
+<link rel='stylesheet' href='/assets/cal.css' media='all' />
+-->
+
+
+
+<!-- For all browsers -->
+<link rel="stylesheet" href="/assets/css/i.css">
+
+<!-- Fresh Squeezed jQuery -->
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+<meta http-equiv="cleartype" content="on">
+
+<!-- Load Modernizr -->
+<script src="/assets/js/vendor/modernizr-2.6.2.custom.min.js"></script>
+
+
+<!-- Icons -->
+<!-- 16x16 -->
+<link rel="shortcut icon" href="/favicon.ico">
+
+<div id="bump">
+  <body class="">
+    <header class="site-header">
+      <div class="wrap">
+        <hgroup>
+          <h1><a href="/">Luke Deniston</a></h1>
+        </hgroup>
+        <a href="#nav" class="menu"><span class='icons'>☰</span></a>
+        <nav role="navigation">
+          <ul>
+            <li>
+              <a href="/" title="Luke Deniston">Home</a>
+            </li>
+            
+            
+                <li><a href="/about" >About</a></li>
+            
+                <li><a href="http://re.vu/Luke.Deniston" >Resumé</a></li>
+            
+
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+
+<section class="article">
+
+
+  <div class="overlay"></div>
+  <div class="featured-image" style="background-image: url(/images/first_bug.jpg)"></div>
+
+
+
+      <article class="wrap post">
+        <header class="post-header">
+          <hgroup>
+            <h1>A Debugging Story</h1>
+            <p class="date">Sep 04, 2014</p>
+            <p class="intro">Debugging is arguably the most important skill in a programmers toolkit, yet it's almost never talked about in technical interviews, and it barely gets a mention in most computer science programs.</p>
+          </hgroup>
+        </header>
+
+        <p>Here&#8217;s a little story about a Swift/CoreData bug I cam across and how I got to the bottom of things.</p>
+
+<h2 id='green_red_refactor'>Green, Red, Refactor?</h2>
+
+<p>I&#8217;ve been working on a small side project in Swift and I just got around to writing some unit tests. Up until this point it has mostly been proof-of-concept, so the code was prety rough and I was ready to start cleaning it up. One technique I used throughout my <code>NSManagedObject</code> classes looked something like this:</p>
+
+<pre><code>class func userWithUsername(username: String) -&gt; User {
+	var user : User?
+	let request = NSFetchRequest()
+	request.entity = NSEntityDescription.entityForName(&quot;User&quot;, inManagedObjectContext: CoreDataStack.sharedInstance.managedObjectContext)
+	request.predicate = NSPredicate(format: &quot;username = &#39;\(username)&#39;&quot;)
+	user = CoreDataStack.sharedInstance.managedObjectContext.executeFetchRequest(request, error: nil).last as? User
+
+	if user == nil {
+		user =  NSEntityDescription.insertNewObjectForEntityForName(&quot;User&quot;, inManagedObjectContext: CoreDataStack.sharedInstance.managedObjectContext) as? User
+		user?.username = username
+	}
+
+	return user!;
+}</code></pre>
+
+<p>This function will give me the <code>User</code> with the given <code>username</code>, or if one doesn&#8217;t exist it creates it. I know this code is working fine, but when I write a unit test it faults on the last line, reporting that <code>user</code> was still <code>nil</code>! But how could that be?</p>
+
+<h2 id='isolate'>Isolate</h2>
+
+<p>The first step I usually take in debugging is <em>isolation</em>: remove as many external pieces as I can so I&#8217;m working with the minimum set of variables within the system.</p>
+
+<p>The function above is not particularly well written, as it depends on <code>CoreDataStack.sharedInstance</code> to work properly. It would be far better to implement <a href='http://en.wikipedia.org/wiki/Dependency_injection'>dependency injection</a> so I could pass in an <code>NSManagedObjectContext</code>. I&#8217;d read a bit about race conditions causing problems with SQLite backed stores in unit tests, so I implemented a new <code>NSInMemoryStoreType</code> persistent store for my tests and refactured the function under test a bit. My new function signature looked like this:</p>
+
+<pre><code>class func userWithUsername(username: String, context: NSManagedObjectContext = CoreDataStack.sharedInstance.managedObjectContext) -&gt; User</code></pre>
+
+<p>I can now pass in an <code>NSManagedObjectContext</code> if I want to, or I can rely on the default one provided by my <code>CoreDataStack.sharedInstance</code>. I patted myself on the back and fired off my tests&#8230; Only to have them fail in the exact same way.</p>
+
+<h2 id='inspect'>Inspect</h2>
+
+<p>Another important part of debugging is <em>inspection</em>: getting good information about what&#8217;s going in your sysyem. (Hey, another &#8220;I&#8221; word! I sense a theme!)</p>
+
+<p>Fortunately CoreData gives us some great inspection tools by the way of <a href='http://nshipster.com/launch-arguments-and-environment-variables/'>launch arguments</a>. I set my launch arguments to <code>-com.apple.CoreData.SQLDebug 3</code> and run the tests again. I watch the first few CoreData arguments scroll through the debugger as the app launches&#8230;then nothing as my tests are fired off. Much headscratching later and I come to the conclusion that <code>NSInMemoryStoreType</code> doesn&#8217;t support the <code>com.apple.CoreData.SQLDebug</code> argument (although I wasn&#8217;t able to find any documentation about this). I ditch the memory store and create a new persistent store just for the tests. Now that I have an actual SQLite database to look at, I find out that my inserts are failing as well as my fetches.</p>
+<figure>
+	<img src='/images/debugger.png' />
+	<figcaption>Relevant <a href='http://xkcd.com/1163/'>XKCD</a></figcaption>
+</figure>
+<h2 id='break_it_down'>Break It Down</h2>
+
+<p>The last technique I used was <em>breaking it down</em>: assume nothing, confirm every step in the process. I&#8217;m sorry that didn&#8217;t start with &#8220;I&#8221;. I&#8217;m not really big on themes.</p>
+
+<p>I make some headway when I split my insert statement into two:</p>
+
+<pre><code>let entity = NSEntityDescription.entityForName(&quot;User&quot;, inManagedObjectContext: context)
+user =  User(entity: entity, insertIntoManagedObjectContext: context)</code></pre>
+
+<p>My inserts are working now, but my fetch requests are failing&#8230; But <em>why</em>? Why did that fix the insert statement? Why did I only have the problem with tests and not in production? And why isn&#8217;t my fetch request working?</p>
+
+<p>I break down the fetch request into it&#8217;s parts so I can inspect it properly (LLDB still isn&#8217;t working right for me as of XCode 6 beta 6). I finally get to this point:</p>
+
+<pre><code>user = context.executeFetchRequest(request, error: error).last as? User</code></pre>
+
+<p>Became:</p>
+
+<pre><code>let results = context.executeFetchRequest(request, error: error)
+user = results.last as? User</code></pre>
+
+<p>I&#8217;m able to confirm that <code>results</code> is getting data! I&#8217;m pulling records in my fetch request! But <code>user</code> still gets set to <code>nil</code>!? -cue head pounding on desk-</p>
+
+<p>But then I see it&#8230; On closer inspection the results of my fetch request are of type <code>AppNameTests.User</code>. When I run the app the same fetch request returns objects of type <code>AppName.User</code>. The <code>as? User</code> was killing things, since it was not able to cast between <code>AppNameTests.User</code> and <code>AppNameTests.User</code>!</p>
+
+<p>Now that I knew what to look for, I found <a href='http://stackoverflow.com/questions/25242173/i-cant-use-my-core-data-model-in-two-targets-in-a-swift-project'>this handy Stack Overflow</a> question about using core data models in multiple targets in Swift. I remove the app name namespace I added to the data models, and I add <code>@objc(User)</code> to the top of the class and watch all the tests turn green.</p>
+
+      <a class="share" href="https://twitter.com/intent/tweet?text=&quot;A Debugging Story&quot;%20/debugging%20via%20&#64;lukedeniston" data-dnt="true">Share</a>
+      <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+
+      
+
+
+      </article>
+
+    </section>
+</div>
+
+<div class="push"></div>
+  <footer>
+    <aside class="wrap">
+      <ol class="prev-posts">
+        <p class="list-title">Recent Posts</p>
+         <!-- for1 -->
+            <li>
+              <span class="recent-title"><a href="/debugging" title="A Debugging Story">A Debugging Story </a></span>
+              <span class="date">Sep 04, 2014</span>
+            </li>
+         <!-- for1 -->
+            <li>
+              <span class="recent-title"><a href="/goodbye-objective-c" title="A Goodbye Letter to Objective-C">A Goodbye Letter to Objecti... </a></span>
+              <span class="date">Jun 12, 2014</span>
+            </li>
+         <!-- for1 -->
+            <li>
+              <span class="recent-title"><a href="/general/demo/sample/real_world_nscoding" title="Real World NSCoding">Real World NSCoding </a></span>
+              <span class="date">Nov 14, 2013</span>
+            </li>
+        
+      </ol>
+
+      <div class="social">
+        <ul>
+            <li><a id="mail" href="mailto:luke@lukedeniston.com"><span class="foot-link">Contact Me</span></a></li>
+
+            
+            <li><a id="twit" href="http://twitter.com/lukedeniston" target="_blank"><span class="foot-link">@lukedeniston</span></a></li>
+            
+
+
+            
+        </ul>
+    </div>
+    </aside>
+    <small>&copy; 2014 Luke Deniston. Powered by <a href="http://jekyllrb.com">Jekyll</a> using the <a href="http://jekyll.gtat.me/about">Balzac</a> theme.</small>
+  </footer>
+
+  <!-- If they're out, get some from the cellar -->
+  <script>window.jQuery || document.write('<script src="/assets/js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+  <script src="/assets/js/retina.min.js"></script>
+
+  <!-- Custom JS -->
+  <script src="/assets/js/scripts.js"></script>
+
+
+  </body>
+</html>
+

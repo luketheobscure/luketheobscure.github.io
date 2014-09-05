@@ -5,13 +5,95 @@
 <generator uri="https://github.com/mojombo/jekyll">Jekyll</generator>
 <link rel="self" type="application/atom+xml" href="/feed.xml" />
 <link rel="alternate" type="text/html" href="" />
-<updated>2014-06-12T13:42:30-07:00</updated>
+<updated>2014-09-04T22:12:35-07:00</updated>
 <id>/</id>
 <author>
   <name>Luke Deniston</name>
   <uri>/</uri>
   <email>luke@lukedeniston.com</email>
 </author>
+
+
+<entry>
+  <title type="html"><![CDATA[A Debugging Story]]></title>
+  <link rel="alternate" type="text/html" href="/debugging" />
+  <id>/debugging</id>
+  <published>2014-09-04T06:58:55-07:00</published>
+  <updated>2014-09-04T06:58:55-07:00</updated>
+  <author>
+    <name>Luke Deniston</name>
+    <uri></uri>
+    <email>luke@lukedeniston.com</email>
+  </author>
+  <content type="html">&lt;p&gt;Here&amp;#8217;s a little story about a Swift/CoreData bug I cam across and how I got to the bottom of things.&lt;/p&gt;
+
+&lt;h2 id=&#39;green_red_refactor&#39;&gt;Green, Red, Refactor?&lt;/h2&gt;
+
+&lt;p&gt;I&amp;#8217;ve been working on a small side project in Swift and I just got around to writing some unit tests. Up until this point it has mostly been proof-of-concept, so the code was prety rough and I was ready to start cleaning it up. One technique I used throughout my &lt;code&gt;NSManagedObject&lt;/code&gt; classes looked something like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class func userWithUsername(username: String) -&amp;gt; User {
+	var user : User?
+	let request = NSFetchRequest()
+	request.entity = NSEntityDescription.entityForName(&amp;quot;User&amp;quot;, inManagedObjectContext: CoreDataStack.sharedInstance.managedObjectContext)
+	request.predicate = NSPredicate(format: &amp;quot;username = &amp;#39;\(username)&amp;#39;&amp;quot;)
+	user = CoreDataStack.sharedInstance.managedObjectContext.executeFetchRequest(request, error: nil).last as? User
+
+	if user == nil {
+		user =  NSEntityDescription.insertNewObjectForEntityForName(&amp;quot;User&amp;quot;, inManagedObjectContext: CoreDataStack.sharedInstance.managedObjectContext) as? User
+		user?.username = username
+	}
+
+	return user!;
+}&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;This function will give me the &lt;code&gt;User&lt;/code&gt; with the given &lt;code&gt;username&lt;/code&gt;, or if one doesn&amp;#8217;t exist it creates it. I know this code is working fine, but when I write a unit test it faults on the last line, reporting that &lt;code&gt;user&lt;/code&gt; was still &lt;code&gt;nil&lt;/code&gt;! But how could that be?&lt;/p&gt;
+
+&lt;h2 id=&#39;isolate&#39;&gt;Isolate&lt;/h2&gt;
+
+&lt;p&gt;The first step I usually take in debugging is &lt;em&gt;isolation&lt;/em&gt;: remove as many external pieces as I can so I&amp;#8217;m working with the minimum set of variables within the system.&lt;/p&gt;
+
+&lt;p&gt;The function above is not particularly well written, as it depends on &lt;code&gt;CoreDataStack.sharedInstance&lt;/code&gt; to work properly. It would be far better to implement &lt;a href=&#39;http://en.wikipedia.org/wiki/Dependency_injection&#39;&gt;dependency injection&lt;/a&gt; so I could pass in an &lt;code&gt;NSManagedObjectContext&lt;/code&gt;. I&amp;#8217;d read a bit about race conditions causing problems with SQLite backed stores in unit tests, so I implemented a new &lt;code&gt;NSInMemoryStoreType&lt;/code&gt; persistent store for my tests and refactured the function under test a bit. My new function signature looked like this:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;class func userWithUsername(username: String, context: NSManagedObjectContext = CoreDataStack.sharedInstance.managedObjectContext) -&amp;gt; User&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I can now pass in an &lt;code&gt;NSManagedObjectContext&lt;/code&gt; if I want to, or I can rely on the default one provided by my &lt;code&gt;CoreDataStack.sharedInstance&lt;/code&gt;. I patted myself on the back and fired off my tests&amp;#8230; Only to have them fail in the exact same way.&lt;/p&gt;
+
+&lt;h2 id=&#39;inspect&#39;&gt;Inspect&lt;/h2&gt;
+
+&lt;p&gt;Another important part of debugging is &lt;em&gt;inspection&lt;/em&gt;: getting good information about what&amp;#8217;s going in your sysyem. (Hey, another &amp;#8220;I&amp;#8221; word! I sense a theme!)&lt;/p&gt;
+
+&lt;p&gt;Fortunately CoreData gives us some great inspection tools by the way of &lt;a href=&#39;http://nshipster.com/launch-arguments-and-environment-variables/&#39;&gt;launch arguments&lt;/a&gt;. I set my launch arguments to &lt;code&gt;-com.apple.CoreData.SQLDebug 3&lt;/code&gt; and run the tests again. I watch the first few CoreData arguments scroll through the debugger as the app launches&amp;#8230;then nothing as my tests are fired off. Much headscratching later and I come to the conclusion that &lt;code&gt;NSInMemoryStoreType&lt;/code&gt; doesn&amp;#8217;t support the &lt;code&gt;com.apple.CoreData.SQLDebug&lt;/code&gt; argument (although I wasn&amp;#8217;t able to find any documentation about this). I ditch the memory store and create a new persistent store just for the tests. Now that I have an actual SQLite database to look at, I find out that my inserts are failing as well as my fetches.&lt;/p&gt;
+&lt;figure&gt;
+	&lt;img src=&#39;/images/debugger.png&#39; /&gt;
+	&lt;figcaption&gt;Relevant &lt;a href=&#39;http://xkcd.com/1163/&#39;&gt;XKCD&lt;/a&gt;&lt;/figcaption&gt;
+&lt;/figure&gt;
+&lt;h2 id=&#39;break_it_down&#39;&gt;Break It Down&lt;/h2&gt;
+
+&lt;p&gt;The last technique I used was &lt;em&gt;breaking it down&lt;/em&gt;: assume nothing, confirm every step in the process. I&amp;#8217;m sorry that didn&amp;#8217;t start with &amp;#8220;I&amp;#8221;. I&amp;#8217;m not really big on themes.&lt;/p&gt;
+
+&lt;p&gt;I make some headway when I split my insert statement into two:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let entity = NSEntityDescription.entityForName(&amp;quot;User&amp;quot;, inManagedObjectContext: context)
+user =  User(entity: entity, insertIntoManagedObjectContext: context)&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;My inserts are working now, but my fetch requests are failing&amp;#8230; But &lt;em&gt;why&lt;/em&gt;? Why did that fix the insert statement? Why did I only have the problem with tests and not in production? And why isn&amp;#8217;t my fetch request working?&lt;/p&gt;
+
+&lt;p&gt;I break down the fetch request into it&amp;#8217;s parts so I can inspect it properly (LLDB still isn&amp;#8217;t working right for me as of XCode 6 beta 6). I finally get to this point:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;user = context.executeFetchRequest(request, error: error).last as? User&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Became:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;let results = context.executeFetchRequest(request, error: error)
+user = results.last as? User&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;I&amp;#8217;m able to confirm that &lt;code&gt;results&lt;/code&gt; is getting data! I&amp;#8217;m pulling records in my fetch request! But &lt;code&gt;user&lt;/code&gt; still gets set to &lt;code&gt;nil&lt;/code&gt;!? -cue head pounding on desk-&lt;/p&gt;
+
+&lt;p&gt;But then I see it&amp;#8230; On closer inspection the results of my fetch request are of type &lt;code&gt;AppNameTests.User&lt;/code&gt;. When I run the app the same fetch request returns objects of type &lt;code&gt;AppName.User&lt;/code&gt;. The &lt;code&gt;as? User&lt;/code&gt; was killing things, since it was not able to cast between &lt;code&gt;AppNameTests.User&lt;/code&gt; and &lt;code&gt;AppNameTests.User&lt;/code&gt;!&lt;/p&gt;
+
+&lt;p&gt;Now that I knew what to look for, I found &lt;a href=&#39;http://stackoverflow.com/questions/25242173/i-cant-use-my-core-data-model-in-two-targets-in-a-swift-project&#39;&gt;this handy Stack Overflow&lt;/a&gt; question about using core data models in multiple targets in Swift. I remove the app name namespace I added to the data models, and I add &lt;code&gt;@objc(User)&lt;/code&gt; to the top of the class and watch all the tests turn green.&lt;/p&gt;
+  &lt;p&gt;&lt;a href=&quot;/debugging&quot;&gt;A Debugging Story&lt;/a&gt; was originally published by Luke Deniston at &lt;a href=&quot;&quot;&gt;Luke Deniston&lt;/a&gt; on September 04, 2014.&lt;/p&gt;</content>
+</entry>
 
 
 <entry>
@@ -27,7 +109,7 @@
   </author>
   <content type="html">&lt;p&gt;I had just been tasked to lead a mobile development team and I needed to pick up Objective-C (and iOS in general) very quickly. I wasn’t too worried since I had made similar transitions in the past without a problem. I assumed this would be even more painless since the more languages you know, the easier it is to learn a new one.&lt;/p&gt;
 
-&lt;h3 id=&#39;i_was_wrong&#39;&gt;I was wrong.&lt;/h3&gt;
+&lt;p&gt;I was wrong.&lt;/p&gt;
 
 &lt;p&gt;Objective-C hurt my brain. My internal parser just couldn’t grasp the syntax. So I got mad. “What’s with the square brackets? Why are variables INSIDE the method name!? This is stupid. Why would anyone make a language like this?” But as with all my feelings I stuffed them into a bottle and never thought about them again, and over time something unexpected happened: &lt;em&gt;I fell in love&lt;/em&gt;.&lt;/p&gt;
 
@@ -35,15 +117,15 @@
 
 &lt;p&gt;But by definition, Objective-C could never be free of C. String concatenation would always be the unsightly &lt;code&gt;[NSString stringWithFormat@“%@ %@, foo, bar]&lt;/code&gt;. All the good operators were already taken by C, so we were left with having to put an ampersand in front of everything. We would never be able to do a simple &lt;code&gt;==&lt;/code&gt; to compare. But who needs tuples, when you can pass in pointers, amiright?&lt;/p&gt;
 
-&lt;p&gt;And occasionally I would bump my shins against the language. Lack of a generics equivalent meant that to be truly safe, every array loop should implement type checking. No namespaces meant that official guidelines dictated putting a three letter prefix before every class. Not to mention enums like &lt;code&gt;kCFStreamErrorHTTPSProxyFailureUnexpectedResponseToCONNECTMethod&lt;/code&gt; (yes, that’s &lt;a href=&#39;https://developer.apple.com/library/mac/documentation/Networking/Reference/CFNetworkErrors/Reference/reference.html#//apple_ref/doc/c_ref/kCFURLErrorNotConnectedToInternet&#39;&gt;real&lt;/a&gt;. Objective-C had a beauty to it, but it was marred in many places by things like it’s &lt;a href=&#39;http://goshdarnblocksyntax.com/&#39;&gt;gosh darn block syntax&lt;/a&gt; (which is the work safe version of that url. The real version doesn’t use “gosh darn” and starts with “f”).&lt;/p&gt;
+&lt;p&gt;And occasionally I would bump my shins against the language. Lack of a generics equivalent meant that to be truly safe, every array loop should implement type checking. No namespaces meant that official guidelines dictated putting a three letter prefix before every class. Not to mention enums like &lt;code&gt;kCFStreamErrorHTTPSProxyFailureUnexpectedResponseToCONNECTMethod&lt;/code&gt; (yes, that’s &lt;a href=&#39;https://developer.apple.com/library/mac/documentation/Networking/Reference/CFNetworkErrors/Reference/reference.html#//apple_ref/doc/c_ref/kCFURLErrorNotConnectedToInternet&#39;&gt;real&lt;/a&gt;. Objective-C had a beauty to it, but it was marred in many places by things like its &lt;a href=&#39;http://goshdarnblocksyntax.com/&#39;&gt;gosh darn block syntax&lt;/a&gt; (which is the work safe version of that url. The real version doesn’t use “gosh darn” and starts with “f”).&lt;/p&gt;
 
 &lt;p&gt;&lt;img alt=&#39;Introducing Swift&#39; src=&#39;/images/Swift.jpg&#39; /&gt;&lt;/p&gt;
 
 &lt;p&gt;When Swift was announced, I was shocked. So much progress had been made in Objective-C over the past year or two that there was no sign of Apple abandoning it. I even felt a little bit betrayed. Here I had become an expert in a language, just in time to see it die.&lt;/p&gt;
 
-&lt;p&gt;But there is a season for everything, and Objective-C’s time has passed. My work responsibilities necessitated my brushing up on Ruby, and I remembered my love for it’s conciseness and intuitiveness. It still manages to read like english, despite being terse. Moving from the Ruby world to the Swift world seems fluid… there’s so much overlap that it seems like different accents of the same language. You say &lt;code&gt;def&lt;/code&gt; I say &lt;code&gt;func&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;But there is a season for everything, and Objective-C’s time has passed. My work responsibilities necessitated my brushing up on Ruby, and I remembered my love for its conciseness and intuitiveness. It still manages to read like english, despite being terse. Moving from the Ruby world to the Swift world seems fluid… there’s so much overlap that it seems like different accents of the same language. You say &lt;code&gt;def&lt;/code&gt; I say &lt;code&gt;func&lt;/code&gt;.&lt;/p&gt;
 
-&lt;p&gt;I think in time my love for Objective-C will fade. Dots and parenthesis will replace square brackets, and Objective-C will take it’s place in history as that oddball permutation of Smalltalk tacked on to C. Swift will take over, and any projects or libraries still in Objective-C will be left to the old guard.&lt;/p&gt;
+&lt;p&gt;I think in time my love for Objective-C will fade. Dots and parenthesis will replace square brackets, and Objective-C will take its place in history as that oddball permutation of Smalltalk tacked on to C. Swift will take over, and any projects or libraries still in Objective-C will be left to the old guard.&lt;/p&gt;
 
 &lt;p&gt;But for a while there, Objective-C and I really had something.&lt;/p&gt;
   &lt;p&gt;&lt;a href=&quot;/goodbye-objective-c&quot;&gt;A Goodbye Letter to Objective-C&lt;/a&gt; was originally published by Luke Deniston at &lt;a href=&quot;&quot;&gt;Luke Deniston&lt;/a&gt; on June 12, 2014.&lt;/p&gt;</content>
