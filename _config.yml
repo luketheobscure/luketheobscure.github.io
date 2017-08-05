@@ -7,8 +7,8 @@ owner:
   avatar:         avatar.png
   bio:            "Programmer & Painter"
   email:          luke@lukedeniston.com
-  twitter:        lukedeniston        
-  github:         luketheobscure      
+  twitter:        lukedeniston
+  github:         luketheobscure
   location:       "Fresno, CA"
 
 tools:
@@ -20,8 +20,12 @@ tools:
 links:
   - title: About
     url: /about
-  - title: Resumé
-    url: http://re.vu/Luke.Deniston
+  - title: Twitter
+    url: https://twitter.com/lukedeniston
+    external: true
+  - title: Github
+    url: https://github.com/luketheobscure
+    external: true
 
 timezone:    America/Los_Angeles
 future:      true
