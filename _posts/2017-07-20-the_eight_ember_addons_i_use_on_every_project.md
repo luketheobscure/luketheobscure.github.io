@@ -31,7 +31,7 @@ Not particularly exciting, but no less important. `ember-cli-document-title` mak
 ### 4. [ember-concurrency](https://ember-concurrency.com)
 
 Ember-concurrency is hard to summarize, but once you start using it, it completely changes the way you write your code. At it’s heart it exposes a `Task` primitive, which can be invoked like an action or called like a function. A `TaskInstance` can be cancelled, queued or restarted. You can easily access the property's last returned value, as well as its current state.
-Consider a simple save action from a form. A naive implementation would simply wire a button up to with something like `{{action 'save'}}`. A slightly more experienced programmer knows to guard against repeated clicks, so puts in some sort of logic to prevent repeated calls to save. An even more experienced programmer would know to also update the UI to give the user feedback. This is trivial with ember-concurrency. A basic save property might look like this:
+Consider a simple save action from a form. A naive implementation would simply wire a button up to with something like `{action 'save'}`. A slightly more experienced programmer knows to guard against repeated clicks, so puts in some sort of logic to prevent repeated calls to save. An even more experienced programmer would know to also update the UI to give the user feedback. This is trivial with ember-concurrency. A basic save property might look like this:
 
 ```javascript
 saveModel: task(function * () {
