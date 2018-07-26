@@ -4,7 +4,7 @@ title:  "The Eight Ember Addons I Use On Every Project"
 date:   2017-07-20 13:58:55
 image:
   feature: computer.jpg
-tags: [swift, objective-c, ios, coredata, debugging]
+tags: [ember]
 description: The depth and breadth of the Ember addon ecosystem can be overwhelming to novice developers. Installing a new addon can feel like a gamble, since you often don’t know what the pitfalls are until after you’ve lived with it in your codebase for a while.
 ---
 
