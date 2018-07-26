@@ -10,9 +10,9 @@ description: Debugging is arguably the most important skill in a programmers too
 
 Here's a little story about an elusive Swift/CoreData bug I came across and how I got to the bottom of things.
 
-##Green, Red, Refactor?
+## Green, Red, Refactor?
 
-I've been working on a small side project in Swift and I just got around to writing some unit tests. Up until this point it has mostly been proof-of-concept, so the code was prety rough and I was ready to start cleaning it up. One technique I used throughout my `NSManagedObject` classes looked something like this:
+I've been working on a small side project in Swift and I just got around to writing some unit tests. Up until this point it has mostly been proof-of-concept, so the code was pretty rough and I was ready to start cleaning it up. One technique I used throughout my `NSManagedObject` classes looked something like this:
 
 {% highlight swift %}
 class func userWithUsername(username: String) -> User {
@@ -28,12 +28,12 @@ class func userWithUsername(username: String) -> User {
 	}
 
 	return user!;
-}	
+}
 {% endhighlight %}
 
 This function will give me the `User` with the given `username`, or if one doesn't exist it creates it. I know this code is working fine, but when I write a unit test it faults on the last line, reporting that `user` was still `nil`! But how could that be?
 
-##Isolate
+## Isolate
 
 The first step I usually take in debugging is *isolation*: remove as many external pieces as I can so I'm working with the minimum set of variables within the system.
 
@@ -45,7 +45,7 @@ class func userWithUsername(username: String, context: NSManagedObjectContext = 
 
 I can now pass in an `NSManagedObjectContext` if I want to, or I can rely on the default one provided by my `CoreDataStack.sharedInstance`. I patted myself on the back and fired off my tests... Only to have them fail in the exact same way.
 
-##Inspect
+## Inspect
 
 Another important part of debugging is *inspection*: getting good information about what's going in your sysyem. (Hey, another "I" word! I sense a theme!)
 
@@ -56,7 +56,7 @@ Fortunately CoreData gives us some great inspection tools by the way of [launch 
 	<figcaption>Relevant <a href="http://xkcd.com/1163/">XKCD</a></figcaption>
 </figure>
 
-##Break It Down
+## Break It Down
 
 The last technique I used was *breaking it down*: assume nothing, confirm every step in the process. I'm sorry that didn't start with "I". I'm not really big on themes.
 
@@ -78,11 +78,9 @@ Became:
 let results = context.executeFetchRequest(request, error: error)
 user = results.last as? User
 {% endhighlight %}
-	
+
 I'm able to confirm that `results` is getting data! I'm pulling records in my fetch request! But `user` still gets set to `nil`!? -cue head pounding on desk-
 
 But then I see it... On closer inspection the results of my fetch request are of type `AppNameTests.User`. When I run the app the same fetch request returns objects of type `AppName.User`. The `as? User` was killing things, since it was not able to cast between `AppNameTests.User` and `AppNameTests.User`!
 
 Now that I knew what to look for, I found [this handy Stack Overflow](http://stackoverflow.com/questions/25242173/i-cant-use-my-core-data-model-in-two-targets-in-a-swift-project) question about using core data models in multiple targets in Swift. I remove the app name namespace I added to the data models, and I add `@objc(User)` to the top of the class and watch all the tests turn green.
-
-

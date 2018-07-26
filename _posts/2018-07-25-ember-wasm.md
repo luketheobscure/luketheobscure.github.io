@@ -13,7 +13,7 @@ _Crossposted to [Medium](https://medium.com/@lukedeniston/ember-webassembly-just
 ## TL;DR
 
 1. Install [ember-auto-import](https://github.com/ef4/ember-auto-import)
-2. Import WASM modules with `import('path/to/wasm')`
+2. Import Wasm modules with `import('path/to/wasm')`
 3. That’s all the steps. You’re done!
 
 ## Background + Complaining
