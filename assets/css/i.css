@@ -309,12 +309,15 @@ code {
   font-weight: bold;
 }
 
+.highlighter-rouge {
+  margin-bottom: 33px;
+}
+
 .highlight {
   background: #3b3b3b;
   padding: 12px;
   border-radius: 4px;
-  margin-bottom: 33px;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 .highlight code {
   color: #f9f9f9;

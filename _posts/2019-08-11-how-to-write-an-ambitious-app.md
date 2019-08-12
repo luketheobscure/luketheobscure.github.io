@@ -63,13 +63,13 @@ And by stupid I mean **AMAZING**. Some tips and tricks I found whle working with
 
 One of the packages we added to our workspace is called `shared-files`. It's where we store things like ESLint and TypeScript configurations. This makes it easy to keep things consistent across packages. Most of our `.eslintrc.js` files now just look like this:
 
-```
+```js
 module.exports = require("shared-files/eslint.config.js");
 ```
 
 And our `tsconfig.json` files looks like:
 
-```
+```json
 {
   "extends": "../shared-files/tsconfig.json",
   "compilerOptions": {
@@ -82,7 +82,7 @@ And our `tsconfig.json` files looks like:
 
 You'll want some dependencies to be on the same version for all your packages. This is especially true for things like Ember Engines, since the host and the engine will need to updated in lockstep. Simply add a resolutions block to the root `package.json` file:
 
-```
+```json
 {
   "private": true,
   "workspaces": [
@@ -96,7 +96,7 @@ You'll want some dependencies to be on the same version for all your packages. T
 
 Then your individual packages can simply declare the dependency like so:
 
-```
+```json
 "ember-engines": "*"
 ```
 
