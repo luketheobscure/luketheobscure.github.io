@@ -14,13 +14,13 @@ Over the past few years a few technologies have matured to the point where writi
   - Ember.js and its embrace of native classes
   - Ember Engines, which brings lazy loading and code encapsulation
 
-This is not a guide on how to get started with any of these things. This is no "Hello World!" or "TODO" example. This article is a brain dump of how to architect a *ginormous* single page web application, while still maintaining developer ergonomics and customer happiness. 
+This is not a guide on how to get started with any of these things. This is not a "Hello World!" or "TODO" example. This article is a brain dump of how to architect a *ginormous* single page web application, while still maintaining developer ergonomics and customer happiness. 
 
 As a general rule of thumb, if your app has less than 100 routes, you don't need to do this. Just use vanilla Ember/React/Vue whatever and you'll be (mostly) just fine. But a few hundred routes? Or a few thousand? Then keep reading.
 
 ## Obligatory Background Section
 
-I've been doing web dev for over a decade, with the past 5 or so years mostly working with Ember. I've tried a few different approaches: monoliths, microservices, serverless, macroservices, monoserviceless. Some of those worked well, and some of them didn't. Some of those are words I just made up. Each approach has its pros and cons, but after years of experminting we've finally found the *One True Architecture* (at least for us).
+I've been doing web dev for over a decade, with the past 5 or so years mostly working with Ember. I've tried a few different approaches: monoliths, microservices, serverless, macroservices, monoserviceless. Some of those worked well, and some of them didn't. Some of those are words I just made up. Each approach has its pros and cons, but after years of experimenting we've finally found the *One True Architecture* (at least for us).
 
 We started with a monolithic front end that talked to microservice back ends. That was **awful** (for the front end).
 
