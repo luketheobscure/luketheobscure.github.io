@@ -80,7 +80,7 @@ And our `tsconfig.json` files looks like:
 
 ### Global Resolutions
 
-You'll want some dependencies to be on the same version for all your packages. This is especially true for things like Ember Engines, since the host and the engine will need to updated in lockstep. Simply add a resolutions block to the root `package.json` file:
+You'll want some dependencies to be on the same version for all your packages. This is especially true for things like Ember Engines, since the host and the engine will need to be updated in lockstep. Simply add a resolutions block to the root `package.json` file:
 
 ```json
 {
@@ -94,7 +94,7 @@ You'll want some dependencies to be on the same version for all your packages. T
 }
 ```
 
-Then your individual packages can simply declare the dependency like so:
+Then your individual packages can declare the dependency like so:
 
 ```json
 "ember-engines": "*"
