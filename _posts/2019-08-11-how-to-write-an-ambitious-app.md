@@ -57,7 +57,7 @@ If you're new to Ember Engines, be sure to go read the [excellent guide](http://
 
 ## Stupid Workspace Tricks<small><sup>[1](#footnote1)</sup></small>
 
-And by stupid I mean **AMAZING**. Some tips and tricks I found whle working with engines.
+And by stupid I mean **AMAZING**. Some tips and tricks I found while working with engines.
 
 ### Shared Config Files
 
@@ -105,6 +105,10 @@ Then your individual packages can simply declare the dependency like so:
 As we migrate our codebase to this New World Order<sup>[2](#footnote2)</sup>, we needed a way to share some business logic with our older standalone Ember apps. The solution was to make a new package in the workspace specifically for sharing logic in and out of the workspace. Since each package in your workspace is still a normal package, you can publish any individual package to a registry to be consumed in other applications. 
 
 This comes with one significant caveat. Since we're not publishing our other packages we can't refer to them inside of our new published package. That means the other _Stupid Workspace Tricks_ won't work here.
+
+## Sound neat? Come join us!
+
+We're building some exciting things over at [Agrian Inc.](https://home.agrian.com/) and we're looking for some great engineers to join our team either remotely or in person at our office in Fresno, California. If you're interested, drop me a line at [careers@agrian.com](mailto:careers@agrian.com).
 
 <small><a name="footnote1">1</a>: In case you don't get [the reference](https://www.youtube.com/watch?v=D8zEBRRw1oI).</small><br>
 <small><a name="footnote2">2</a>: This is, of course, a reference to [Magic: The Gathering](https://mtg.gamepedia.com/New_World_Order).</small>
