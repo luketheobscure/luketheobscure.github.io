@@ -20,8 +20,8 @@ tools:
 links:
   - title: About
     url: /about
-  - title: Twitter
-    url: https://twitter.com/lukedeniston
+  - title: Linkedin
+    url: https://www.linkedin.com/in/lukedeniston/
     external: true
   - title: Github
     url: https://github.com/luketheobscure

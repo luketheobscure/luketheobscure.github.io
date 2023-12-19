@@ -8,10 +8,10 @@ image:
   feature: soft-trees.jpg
 ---
 
-Luke Deniston is an engineer and user experience designer with a background in programming, user experience design, and graphic design for print and screen. He specializes in delivering cohesive and elegant user experiences by blending the latest in user interaction controls while balancing tried and true usablility guidelines.
+I started out as an artist and designer, but I wasn’t great at it. I was much better at programming, so I’ve been doing that for the past 20 or so years. I could fill this paragraph with keywords, but I won’t. Instead I’ll just say that over the last two decades I’ve done just about every aspect of software development.
 
-He is an expert in JavaScript, with extensive experience in single page web apps. He's also worked with Rails, Swift, Objective-C and PHP.
+These days my expertise is mostly in web development. I’m an expert in TypeScript, but I’ve a fondness for Swift, Rust and now Kotlin. I enjoy bringing structure to large, complex projects.
 
-In 2001, Luke left a career in technical management for a small sound card manufacturer in order to follow more artistic pursuits. After spending several years as a freelance designer he joined up with JP Marketing as an Art Director in 2007. In 2011 he took a job with Agrian, Inc where he has alternately led their mobile development and User Experience teams.
+I like making music, reading books, and I still paint from time to time. I have four children, and they are my world.
 
 ![Luke Deniston](/images/me.jpg)
