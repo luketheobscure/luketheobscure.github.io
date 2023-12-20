@@ -20,6 +20,8 @@ tools:
 links:
   - title: About
     url: /about
+  - title: Books
+    url: /books
   - title: Linkedin
     url: https://www.linkedin.com/in/lukedeniston/
     external: true
