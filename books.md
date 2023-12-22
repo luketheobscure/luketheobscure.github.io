@@ -10,13 +10,15 @@ It's trivial today to find a list of "must read" programming books. So instead h
 
 ## Engineering
 
-[The Little Schemer](https://mitpress.mit.edu/9780262560993/the-little-schemer/) by Daniel P. Friedman and Matthias Felleisen. This book is written in unique question and answer format. Even if you have no interest in Scheme (a Lisp dialect) this book is still worth the read. My first programming languages were all object oriented, so I always struggled to understand functional programming. By the end of this book I found I could _think_ functionally, and things like recursion became intuitive.
+[The Little Schemer](https://mitpress.mit.edu/9780262560993/the-little-schemer/) by Daniel P. Friedman and Matthias Felleisen. This book is written in a unique question and answer format. Even if you have no interest in Scheme (a Lisp dialect) this book is still worth the read. My first programming languages were all object oriented, so I always struggled to understand functional programming. By the end of this book I found I could _think_ functionally, and things like recursion became intuitive.
 
 [Why's (Poignant) Guide to Ruby](https://poignant.guide/) by Why the Lucky Stiff. Continuing the theme of non-traditional programming books, this book combines humor, storytelling, and illustrations to teach fundamental programming concepts. It was my first introduction to the Ruby community, and a big reason I've always had a fondness for it.
 
 | ![Comic from the book](/images/the.foxes-2.png) | 
 |:--:| 
 | *Panel from "Why's (Poignant) Guide to Ruby"* |
+
+[Seven Concurrency Models in Seven Weeks](https://pragprog.com/titles/pb7con/seven-concurrency-models-in-seven-weeks/) by Paul Butcher. Concurrency models range from the overly baroque ([Grand Central Dispatch](https://en.wikipedia.org/wiki/Grand_Central_Dispatch)) to the frustratingly primitive ([Promises](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/Promise) in JavaScript). Part of the excellent [Seven in Seven](https://pragprog.com/categories/seven-in-seven/) series, this book explores the underlying patterns behind different approaches, allowing you see clearly the pros and cons of different implementations.
 
 ## Design
 
