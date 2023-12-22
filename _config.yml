@@ -22,6 +22,8 @@ links:
     url: /about
   - title: Books
     url: /books
+  - title: Music
+    url: /music
   - title: Linkedin
     url: https://www.linkedin.com/in/lukedeniston/
     external: true
