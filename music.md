@@ -3,7 +3,7 @@ layout: post
 permalink: /music/index.html
 title: Music
 image:
-  feature: sd-pano.jpg
+  feature: california-pano.png
 ---
 
 Music has been one of the few constants in my life. I started playing guitar when I was about 13, and have since expanded to a dozen or so instruments. Here's a small sample of some of the projects I've been a part of.
@@ -34,6 +34,6 @@ I played bass and sang backup in this band back in the early 2000's. The opening
 
 ---
 
-_The image "Downtown San Diego Panorama" by Luke Deniston is licensed under [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/?ref=openverse)._
+_The image "California Adventure Panorama" by Luke Deniston is licensed under [CC BY-SA 2.0](https://creativecommons.org/licenses/by-sa/2.0/?ref=openverse)._
 
 
