@@ -1126,3 +1126,8 @@ footer .social ul li:last-child {
     font-size: 12px;
   }
 }
+
+.blockquote-normal p {
+  text-align: initial;
+  font-size: 22px;
+}
