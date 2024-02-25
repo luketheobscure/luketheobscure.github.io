@@ -9,7 +9,9 @@ description: "Fewer moving parts, fewer broken pieces"
 
 I read an article today that I disagreed with so strongly that I'm going to temporarily come out of blogging retirement to submit a rebuttal. I'm talking about "[You Probably Don't Need eslint-config-prettier or eslint-plugin-prettier](https://www.joshuakgoldberg.com/blog/you-probably-dont-need-eslint-config-prettier-or-eslint-plugin-prettier/)" by Josh Goldberg who by all accounts is probably a lot smarter than me. But I've been around for a while and _I've seen things you people wouldn't believe_ so it's time to impart some wisdom. Maybe I don't convince you, but hopefully I give you a new way to look at things.
 
-The crux of Josh's article (if you didn't infer it from the title) is that you shouldn't mix ESLint (a linter) and Prettier (a formatter). I think his claims boil down to this:
+For the uninitiated, Prettier is a standalone code formatter. The package [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier) is a popular plugin for the ESLint linter that allows you to apply the Prettier formatting from within ESLint.
+
+The crux of Josh's article (if you didn't infer it from the title) is that you shouldn't mix ESLint and Prettier in this way, and instead run the tools separately. I think his claims boil down to this:
 
 - Combining the tools is confusing
 - Different tasks should use different tools
