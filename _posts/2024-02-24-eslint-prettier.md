@@ -7,7 +7,7 @@ image:
 description: "Fewer moving parts, fewer broken pieces"
 ---
 
-I read an article today that I disagreed with so strongly that I'm going to temporarily come out of blogging retirement to submit a rebuttal. I'm talking about "[You Probably Don't Need eslint-config-prettier or eslint-plugin-prettier](https://www.joshuakgoldberg.com/blog/you-probably-dont-need-eslint-config-prettier-or-eslint-plugin-prettier/)" by Josh Goldberg who by all accounts is probably a lot smarter than me. But I've been around for a while and _I've seen things you people wouldn't believe_ so it's time to impart some wisdom. Maybe I don't convince you, but hopefully I give you a new way to look at things.
+I read an article today that I disagreed with so strongly that I'm going to temporarily come out of blogging retirement to submit a rebuttal. I'm talking about "[You Probably Don't Need eslint-config-prettier or eslint-plugin-prettier](https://www.joshuakgoldberg.com/blog/you-probably-dont-need-eslint-config-prettier-or-eslint-plugin-prettier/)" by Josh Goldberg, a developer I have nothing but respect for[^1]. But I've been around for a while and _I've seen things you people wouldn't believe_ so it's time to impart some wisdom. Maybe I don't convince you, but hopefully I give you a new way to look at things.
 
 For the uninitiated, Prettier is a standalone code formatter. The package [eslint-plugin-prettier](https://github.com/prettier/eslint-plugin-prettier) is a popular plugin for the ESLint linter that allows you to apply the Prettier formatting from within ESLint.
 
@@ -70,6 +70,8 @@ The first thing I did was set up ESLint to take over for TSLint and Prettier. Th
 Projects naturally grow in complexity over time. Simplifying is much harder to do, and only happens with effort. So opting right out of the gate to using two tools when one would do, you're opting into extra complexity. I love the concept of [innovation tokens](https://mcfunley.com/choose-boring-technology), maybe it's to start thinking about complexity tokens in the same way. If you have a finite amount of complexity tokens to spend, where will you spend them?
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/xp5Zq7oMtEc?si=oAj_Mu-eqvWDgLIE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+
+[^1]: The first version of this document read something like "Josh, who is smarter than me". Josh very kindly pointed me to his article ["No Unattainable Intelligence"](https://www.joshuakgoldberg.com/blog/no-unattainable-intelligence/) that addresses these kinds of statements, and I wholeheartedly agree with it.
 
 ---
 

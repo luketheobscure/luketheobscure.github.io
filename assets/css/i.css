@@ -252,7 +252,7 @@ p {
 }
 
 a, a:visited, a:active {
-  color: #8ab9d1;
+  color: #5291c2;
   -moz-transition: all 0.25s ease-in-out;
   -o-transition: all 0.25s ease-in-out;
   -webkit-transition: all 0.25s ease-in-out;
@@ -283,6 +283,8 @@ small {
 
 sup {
   vertical-align: top;
+  font-size: smaller;
+  line-height: initial;
 }
 
 .hilite {
@@ -814,6 +816,15 @@ header.site-header nav ul li a:hover {
   -webkit-transition: all 0.2s ease;
   -ms-transition: all 0.2s ease;
   transition: all 0.2s ease;
+}
+
+.post .footnotes ol li {
+  font-size: 18px;
+  margin-left: 16px;
+}
+
+.post .footnotes ol li p {
+  font-size: smaller;
 }
 
 /* Footer Stuff */
