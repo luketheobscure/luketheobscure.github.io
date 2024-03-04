@@ -31,7 +31,9 @@ a:hover {
 }
 
 em {
-    font-style: italic;
+    padding: 1px 2px;
+    border-radius: 2px;
+    background: #ffe8c0;
 }
 
 strong {
@@ -41,12 +43,6 @@ strong {
 small {
     font-size: $fs5;
 }
-
-sup {
-    vertical-align: top;
-    font-size: smaller;
-    line-height: initial;
-  }
 
 .hilite {
     display: inline-block;
@@ -69,19 +65,16 @@ blockquote, blockquote p {
 code {
     color: $accent;
     font-family: "Monaco", "Courier New", "Courier";
-    font-size: .7em;
+    font-size: .75em;
     font-weight: bold;
 }
-
-.highlighter-rouge {
-    margin-bottom: 33px;
-  }
 
 .highlight {
     background: $black;
     padding: 12px;
     border-radius: 4px;
-    overflow-x: auto;
+    margin-bottom: $lh;
+    overflow-x: scroll;
 
     code {
         color: $white;
@@ -350,15 +343,6 @@ header.site-header nav {
     float: none;
     min-height: 500px;
 }
-
-.post .footnotes ol li {
-    font-size: 18px;
-    margin-left: 16px;
-  }
-  
-  .post .footnotes ol li p {
-    font-size: smaller;
-  }
 
 .archive-wrap {
     @include column(10);
@@ -680,7 +664,7 @@ h1 {
 }
 
 blockquote, blockquote p {
-    font-size: $fs2;
+    font-size: $fs3;
 }
 
 footer {
