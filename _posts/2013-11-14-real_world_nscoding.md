@@ -32,7 +32,7 @@ Fortunately, the dynamic nature of the Objective-C runtime gave me some introspe
 ## The Solution
 I've had this method kicking around for a while (origins unknown). It's in a category for NSObject. Don't forget to `#import <objc/runtime.h>`:
 
-{% highlight objective-c %}
+{% highlight objectivec %}
 - (NSMutableDictionary *)toDictionary {
     NSMutableDictionary *props = [NSMutableDictionary dictionary];
     unsigned int outCount, i;
@@ -54,7 +54,7 @@ I've had this method kicking around for a while (origins unknown). It's in a cat
 
 This give us a nice NSDictionary representation of any NSObject. I made another category method that levies this dictionary to encode the object:
 
-{% highlight objective-c %}
+{% highlight objectivec %}
 - (void)LJD_encodeWithCoder:(NSCoder *)aCoder {
     NSMutableDictionary *selfDictionary = [self toDictionary];
     for (id key in selfDictionary) {
@@ -70,7 +70,7 @@ This give us a nice NSDictionary representation of any NSObject. I made another 
     
 Then for each class I need to persist, I simply declare that they conform to the `NSCoding` protocol and add the following method:
 
-{% highlight objective-c %}
+{% highlight objectivec %}
 - (void)encodeWithCoder:(NSCoder *)aCoder{
     [self LJD_encodeWithCoder:aCoder];
 }
@@ -84,7 +84,7 @@ So far so good, right? Get a dictionary. Encode it. Easy. Now we just need to de
 
 Here's where it get's a little gross. Here's the full, production method for you to take in (note that `VLog` is a macro that does some fun things with `NSLog` if DEBUG is defined). From that same NSObject category:
 
-{% highlight objective-c %}
+{% highlight objectivec %}
 - (id)LJD_initWithCoder:(NSCoder *)aDecoder{
     NSMutableDictionary *selfDict = [self toDictionary];
     VLog(@"Decoding a %@", NSStringFromClass([self class]) );
@@ -126,7 +126,7 @@ Here's where it get's a little gross. Here's the full, production method for you
 
 Then in any class we've previously encoded:
 
-{% highlight objective-c %}
+{% highlight objectivec %}
 - (id)initWithCoder:(NSCoder *)aDecoder{
     self = [super init];
     [self LJD_initWithCoder:aDecoder];
@@ -140,7 +140,7 @@ There's a few downsides to this approach. While it's mostly stable, we did run i
 
 The other downside is this bit of code:
 
-{% highlight objective-c %}
+{% highlight objectivec %}
 NSString *selectorName = [NSString stringWithFormat:@"set%@:", [key stringByReplacingCharactersInRange:NSMakeRange(0,1) withString:[[key substringToIndex:1] capitalizedString]]];
 
 if (value && value != [NSNull null] && [self respondsToSelector:NSSelectorFromString(selectorName)])...
@@ -150,7 +150,7 @@ This is checking if it's a readonly property by looking for the selector `setVal
 
 The last downside to this is side effects from calling `setValue:` type selectors. Many examples you see of NSCoding involve setting the instance variables inside of `initWithCoder:`, like so:
 
-{% highlight objective-c %}
+{% highlight objectivec %}
 - (id)initWithCoder:(NSCoder *)decoder {
     self = [super init];
     if (!self) {
@@ -166,7 +166,7 @@ The last downside to this is side effects from calling `setValue:` type selector
 
 We had a great time trying to figure out why our final values didn't match what we encoded, until we finally realized that some of the setter methods were setting other values in the class! That's where the somewhat maniacal logging came into play. We ended up solving this by using a variant of this approach:
 
-{% highlight objective-c %}
+{% highlight objectivec %}
 -(id)initWithCoder:(NSCoder *)aDecoder {
     self = [super init];
     _doNotUpdate = YES;
@@ -179,7 +179,7 @@ We had a great time trying to figure out why our final values didn't match what 
 
 Any of our setter methods that had cascading effects all checked for `_doNotUpdate` before doing any changes.
 
-##Conclusion
+## Conclusion
 
 I won't go over `NSKeyedArchiver` or `NSKeyedUnarchiver` here. Those classes are very straightforward once we had all the encoding/decoding worked out.
 
