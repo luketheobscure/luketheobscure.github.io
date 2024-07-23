@@ -185,6 +185,21 @@ header.site-header {
 
 }
 
+@media screen and (max-width: 680px) {
+    .site-header nav {
+        display: none;
+        transition: max-height 0.1s ease-out;
+        overflow: hidden;
+        max-height: 0;
+      }
+      
+      .site-header nav.open {
+        display: block;
+        max-height: 500px; /* Adjust this value based on the maximum height of your menu */
+      }
+}
+
+
 #bump .darken {
       
       a {
