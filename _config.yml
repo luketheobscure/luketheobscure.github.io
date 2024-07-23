@@ -36,5 +36,8 @@ future:      true
 
 permalink:   /:categories/:title
 
+sass:
+    sass_dir: assets/sass
+
 include: [".htaccess"]
 exclude: ["lib", "config.rb", "Capfile", "config", "log", "Rakefile", "Rakefile.rb", "tmp"]
