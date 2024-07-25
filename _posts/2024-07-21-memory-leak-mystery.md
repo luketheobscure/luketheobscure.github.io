@@ -120,8 +120,6 @@ All that's left is to compare the snapshots and see if anything seems suspicious
 
 ## Final Part: Identifying the Culprit
 
->The rain had turned into a relentless downpour, matching the mood inside my office. I knew this was just the beginning. Tracking down a memory leak was no small task, and it was going to take all the skills I had. But I’d been down this road before. I’d find the culprit, one way or another. In this city, you had to, or you’d drown in the deluge of your own mistakes.
->
 >We spent days gathering intel. Finally, with a pile of blurry snapshots spread out across my desk the true killer jumped out at me. "Hey Charlie," I called. "Anything look funny in this snapshot to you?"
 >
 > Charlie stared. "I don't see it?"
