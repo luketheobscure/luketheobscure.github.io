@@ -35,9 +35,9 @@ The 502 errors were concerning. Each 502 represented someone who was trying to v
 
 ### The Investigation
 
-Like any good detective, I started by gathering clues. We have all of our applications wired up with both New Relic and Sumologic, but for this kind of thing I find that Sumologic is the better tool for getting a picture of the problem. I was able to determine the following:
+Like any good detective, I started by gathering clues. We have all of our applications wired up with both [New Relic](https://newrelic.com/) and [Sumologic](https://www.sumologic.com/), but for this kind of thing I find that Sumologic is the better tool for getting a picture of the problem. I was able to determine the following:
 
-- **History**: Errors traced back to at least June.
+- **History**: Errors traced back to at least three months.
 - **Frequency**: Occurrences every 3-4 hours.
 - **Scope**: Limited to the Next.js application.
 - **Impact**: Serious enough to trigger PagerDuty alerts.
@@ -57,7 +57,7 @@ We had made some pretty big architectural changes recently, including switching 
 > I called Charlie. “I can't be certain, but I think I found your killer. It goes by the name PM2.”
 {: class="blockquote-normal"}
 
-PM2 (Process Manager 2) is a production process manager for Node.js applications. It allows you to keep applications alive forever, reload them without downtime, and facilitate common system admin tasks. PM2 can perform automatic restart of applications if they crash, or in this case, they start to run out of memory.
+[PM2](https://pm2.keymetrics.io/) (Process Manager 2) is a production process manager for Node.js applications. It allows you to keep applications alive forever, reload them without downtime, and facilitate common system admin tasks. PM2 can perform automatic restart of applications if they crash, or in this case, they start to run out of memory.
 
 Armed with the knowledge that PM2 was killing the process we adjusted the [`max_memory_restart` parameter](https://pm2.keymetrics.io/docs/usage/memory-limit/) in our PM2 config, hoping that it was just an issue with resourcing. We crossed our fingers and pushed it live. We would have our answer within a day or two.
 
