@@ -4,7 +4,7 @@
 /* TEAM */
 Creator: {{ site.owner.name }}
 Contact: {{ site.owner.email }}
-Twitter: {{ site.owner.twitter }}
+Bluesky: {{ site.owner.bluesky }}
 Location: {{ site.owner.location }}
                            
 /* THANKS */                           
