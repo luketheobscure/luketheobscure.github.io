@@ -550,21 +550,34 @@ header.site-header nav {
         text-align: center;
         display: block;
         margin: 0 auto;
-        width: 76px;
+        width: 92px;
         font-size: $fs5;
         font-family: $sans;
         text-transform: uppercase;
         font-weight: bold;
         letter-spacing: 1px;
-        padding: 4px 6px 4px 6px;
+        padding: 4px 6px 4px 28px;
         color: $grey-light;
         border: 2px solid transparentize($grey-light,.3);
+        position: relative;
         @include br(4px);
         &:hover {
             color: $link;
             border-color: transparentize($link,.3);
             @include transit(all,.2s,ease)
         }
+        &::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 16px;
+            height: 16px;
+            background-image: url('/images/bluesky.svg');
+            background-size: contain;
+            background-repeat: no-repeat;
+          }
     }
 }
 
