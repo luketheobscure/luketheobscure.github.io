@@ -1,13 +1,11 @@
 ---
 layout: post
 title: Real World NSCoding
-categories: [general, demo, sample]
-tags: [demo, dbyll, dbtek, sample2]
 description: The code the project needs, but not the one it deserves
 ---
 
 
-In the hillarious and painfully accurate article [Programming Sucks](http://stilldrinking.org/programming-sucks), Peter Welch said this:
+In the hilarious and painfully accurate article [Programming Sucks](http://stilldrinking.org/programming-sucks), Peter Welch said this:
 
 >Every programmer occasionally...opens up a file on their computer...This file is Good Code. It has sensible and consistent names for functions and variables. It's concise. It doesn't do anything obviously stupid. It has never had to live in the wild, or answer to a sales team...
 

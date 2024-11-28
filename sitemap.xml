@@ -6,6 +6,15 @@ layout: null
     <url>
         <loc>{{ site.url }}</loc>
     </url>
+    <url>
+        <loc>{{ site.url }}/about</loc>
+    </url>
+    <url>
+        <loc>{{ site.url }}/music</loc>
+    </url>
+    <url>
+        <loc>{{ site.url }}/books</loc>
+    </url>
 
     {% for post in site.posts %}
     <url>
