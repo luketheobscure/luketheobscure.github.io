@@ -73,6 +73,10 @@ code {
     font-weight: bold;
 }
 
+div.highlight {
+    margin-bottom: $lh;
+}
+
 .highlight {
     background: $black;
     padding: 12px;
