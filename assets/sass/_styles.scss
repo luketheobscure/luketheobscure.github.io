@@ -330,7 +330,19 @@ header.site-header nav {
             max-height: 800px;
         }
     }
-    
+
+    &.short-feature {
+        .overlay,
+        .featured-image {
+            min-height: 140px;
+            height: 18vh;
+            max-height: 220px;
+        }
+        .featured-image img {
+            max-height: 220px;
+        }
+    }
+
     // Header Stuff
     header {
         margin: (2*$lh) 0 $lh 0;
@@ -692,11 +704,6 @@ footer {
         }
     }
 }
-
-.disqus {
-    margin-top: $lh*3;
-}
-
 
 /* Tablet
    ========================================================================== */

@@ -1,5 +1,5 @@
 ---
-layout: post
+layout: post-short-feature
 title: "Sloppocalypse Now"
 date: 2026-05-23
 image:
@@ -16,8 +16,9 @@ I took a swing at a LinkedIn-flavored teaser for this and it came out a little t
 Here's the best slide from my presentation as a teaser:
 
 <div style="position: relative; width: 100%; aspect-ratio: 16 / 9;">
-  <iframe src="/assets/embeds/prompt2prod.html" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" loading="lazy" title="Prompt 2 Prod"></iframe>
+  <iframe src="/assets/embeds/prompt2prod.html" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" loading="lazy" title="Prompt 2 Prod" allowfullscreen></iframe>
 </div>
+<p style="text-align: right; font-size: 14px; margin-top: 4px;"><a href="/assets/embeds/prompt2prod.html" target="_blank" rel="noopener">Open fullscreen ↗</a></p>
 
 [AI DevSummit](https://aidevsummit.co/) + DeveloperWeek Management 2026 is May 27–28 in South San Francisco. If you're going, come say hi.
 

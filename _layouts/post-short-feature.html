@@ -1,17 +1,13 @@
+{% include head.html %}
+
+<section class="article short-feature">
+
 {% if page.image.feature %}
-
-{% include head-dark.html %}
-
-<section class="article">
-
-  <div class="overlay overlay-lighter"></div>
+  <div class="overlay"></div>
   <div class="featured-image" style="background-image: url({{ site.url }}/images/{{ page.image.feature }})"></div>
 {% else %}
-
-{% include head-dark.html %}
-
-<section class="article pad-top">
-
+  <div class="overlay"></div>
+  <div class="featured-image" style="background-image: url({{ site.url }}/images/typewriter.jpg)"></div>
 {% endif %}
 
 
@@ -29,6 +25,7 @@
         <a class="share" href="https://bsky.app/intent/compose?text=&quot;{{ page.title }}&quot;%20{{ site.url }}{{ page.url }}%20via%20&#64;{{ site.owner.bluesky }}">Share</a>
 
       </article>
+
     </section>
 </div>
 
