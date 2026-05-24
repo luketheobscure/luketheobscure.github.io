@@ -21,6 +21,10 @@
               site.owner.bluesky }}</span></a></li>
         {% endif %}
 
+        {% if site.owner.mastodon %}
+        <li><a id="mast" rel="me" href="{{ site.owner.mastodon }}" target="_blank"><span class="foot-link">{{ site.owner.mastodon | split: '/' | last }}</span></a></li>
+        {% endif %}
+
 
         {% if site.owner.dribbble %}
         <li><a id="drib" href="http://dribbble.com/{{ site.owner.dribbble }}" target="_blank"><span
